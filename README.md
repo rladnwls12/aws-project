@@ -235,7 +235,7 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 
 sudo dnf install python3.12 python3.12-pip -y
 
-pip3.12 install fastapi uvicorn boto3 pipreqs
+pip3.12 install fastapi uvicorn[standard] boto3 pipreqs
 
 pipreqs ./ --force
 
