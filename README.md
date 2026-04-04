@@ -100,8 +100,11 @@
 #### 패키지 설치
 
 ```bash
-sudo yum install python3.12 python-pip -y
-pip3 install fastapi uvicorn boto3 
+sudo yum install python3.12 python3.12-pip -y
+pip3.12 install fastapi uvicorn boto3 pipreqs
+pipreqs [api파일 경로] #requirements.txt 생성
+pip3.12 install -r requirement.txt
+
 ```
 
 ---
@@ -145,7 +148,7 @@ sudo systemctl enable --now worldpay
 * 헬스체크 로그 제외 (`/health`)
 
 ```bash
-sudo yum install amazon-cloudwatch-agent -y
+sudo dnf install amazon-cloudwatch-agent -y
 
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 -a fetch-config -m ec2 \
