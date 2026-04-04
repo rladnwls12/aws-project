@@ -95,6 +95,8 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 
 ## 💻 Compute & Application
 
+### **EC2 생성전에 DB섹션의 Db생성을 완료해주십쇼**
+
 ### Bastion
 
 - SSH 접근 서버
