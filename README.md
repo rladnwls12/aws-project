@@ -1,123 +1,116 @@
-# 🌍 InternationalPay  Service - AWS Infrastructure & Deployment
+# 🌍 InternationalPay Service - AWS Infrastructure & Deployment
 
-> 확장 가능하고, 안전하며, 자동화된 결제 서비스 인프라 구축
-> FastAPI 기반 애플리케이션 + AWS 클라우드 아키텍처
+> **확장 가능하고 안전하며 자동화된 결제 인프라 구축 가이드**  
+> FastAPI 애플리케이션 아키텍처 및 AWS 클라우드 배포 프로세스 정리
+
+---
+
+## 🧭 Table of Contents
+1. [📌 Overview](#-overview)
+2. [🏗 Architecture](#-architecture)
+3. [🔐 Security & Network](#-security--network)
+4. [💾 Database](#-database)
+5. [💻 Compute & Application](#-compute--application)
+6. [⚙️ Deployment & Scaling](#-deployment--scaling)
+7. [📊 Logging & Monitoring](#-logging--monitoring)
+8. [📄 Configuration Samples](#-configuration-samples)
+9. [🧠 Design Philosophy](#-design-philosophy)
+10. [🏁 Summary](#-summary)
 
 ---
 
 ## 📌 Overview
 
-이 프로젝트는 **Worldpay 서비스 운영을 위한 AWS 인프라 구성 및 배포 자동화 구조**를 제공합니다.
+이 문서는 **InternationalPay 서비스** 운영을 위한 AWS 인프라 구성 및 배포 자동화 체계를 설명합니다.
 
-✔️ 보안 중심 설계 (KMS, VPC)
-✔️ 고가용성 (ALB + Auto Scaling)
-✔️ 운영 자동화 (Systemd + CloudWatch)
-✔️ 확장 가능한 구조 (AMI 기반 배포)
-
----
-
-## 🧭 Table of Contents
-
-* [🏗 Architecture](#-architecture)
-* [🔐 Security](#-security)
-* [💻 Compute](#-compute)
-* [⚙️ Deployment](#️-deployment)
-* [📊 Logging](#-logging)
-* [🚀 Scaling](#-scaling)
-* [📄 Configuration](#-configuration)
+- 보안 중심 설계 (KMS, VPC)
+- 고가용성 (ALB + ASG)
+- 운영 자동화 (Systemd + CloudWatch)
+- 일관성 배포 (AMI 기반)
 
 ---
 
 ## 🏗 Architecture
 
-```
-[User]
-   ↓
-[ALB]
-   ↓
-[Auto Scaling Group]
-   ↓
-[EC2 Instances (FastAPI)]
-   ↓
-[Aurora DB]
-```
 
-### 핵심 구조
+User → ALB (Public) → EC2 ASG (Private) → Aurora DB (Isolated)
 
-* **ALB** → 트래픽 분산
-* **ASG** → 자동 확장
-* **EC2 (AMI 기반)** → 일관된 배포
-* **Aurora** → 고성능 DB
-* **CloudWatch** → 로그 & 모니터링
+
+### 구성 요소
+
+- ALB: 트래픽 분산  
+- ASG: 자동 확장 및 장애 복구  
+- Aurora: 데이터 저장 및 복구 지원  
+- CloudWatch: 로그 및 모니터링  
 
 ---
 
-## 🔐 Security
+## 🔐 Security & Network
 
-### VPC & Network
+### 네트워크
 
-* Private Subnet 기반 설계
-* VPC Peering으로 내부 통신 분리
+- Public / Private Subnet 분리  
+- VPC Peering 내부 통신  
 
-### Encryption (KMS)
+### 보안 그룹
 
-* 모든 데이터 암호화
-* 서비스별 CMK 분리
+| 대상 | 포트 | 허용 |
+|------|------|------|
+| Bastion | 22 | 관리자 IP |
+| App | 8000 | ALB |
+| DB | 3306 | App |
 
-### ⚠️ 개선 권장 (중요)
-
-현재 설정:
-
-* `0.0.0.0/0` 전체 허용
-
-👉 실무에서는 반드시 아래로 변경:
-
-* Bastion → 특정 IP만 허용
-* DB → Private 접근만 허용
-* App → ALB만 접근 허용
+✔ 최소 권한 원칙 적용
 
 ---
 
-## 💻 Compute
+## 💾 Database
 
-### Bastion Host
+### Aurora 설정
 
-* EIP (고정 IP)
-* SSH 접근 전용 서버
+- Engine: Aurora MySQL (MySQL 8.0 호환)
+- 배치: Private Subnet (Multi-AZ)
+- 접근: App Server만 허용
+
+### 보안
+
+- KMS CMK 기반 스토리지 암호화
+- DB 직접 외부 접근 차단
+
+### 가용성
+
+- 자동 백업 활성화 (≥ 7일)
+- PITR (Point-in-Time Recovery) 활성화
 
 ---
+
+## 💻 Compute & Application
+
+### Bastion
+- SSH 접근 서버  
+- EIP 사용  
 
 ### Application Server
 
-> Test EC2 → 검증 → AMI 생성 → 배포
+- AMI 기반 배포  
+- IAM Role:
+  - Secrets Manager
+  - KMS
+  - CloudWatch Logs
 
-#### IAM Role
-
-* Secrets Manager
-* KMS
-* CloudWatch Logs
-
-#### 패키지 설치
+### 설치
 
 ```bash
-sudo yum install python3.12 python3.12-pip -y
+sudo dnf install python3.12 python3.12-pip -y
 pip3.12 install fastapi uvicorn boto3 pipreqs
-pipreqs [api파일 경로] #requirements.txt 생성
-pip3.12 install -r requirement.txt
-
+pipreqs ./ --force
+pip3.12 install -r requirements.txt
 ```
-
----
-
-## ⚙️ Deployment
-
-### Systemd Service
-
-📍 `/etc/systemd/system/worldpay.service`
-
-```ini
+###⚙️ Deployment & Scaling
+Systemd
+```ini 
 [Unit]
-Description=worldpay service
+Description=InternationalPay FastAPI Service
 After=network.target
 
 [Service]
@@ -130,24 +123,13 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 ```
-
-### 실행
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now worldpay
-```
-
----
-
-## 📊 Logging
-
-### CloudWatch Logs
-
-* 로그 파일: `/home/ec2-user/worldpay.log`
-* 헬스체크 로그 제외 (`/health`)
-
-```bash
+배포 흐름
+Test EC2 구성
+AMI 생성
+Launch Template 적용
+ASG 배포
+###📊 Logging & Monitoring
+CloudWatch Agent
 sudo dnf install amazon-cloudwatch-agent -y
 
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
@@ -155,35 +137,10 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s
 
 sudo systemctl restart amazon-cloudwatch-agent
-```
-
----
-
-## 🚀 Scaling
-
-### AMI 기반 배포
-
-* 검증된 EC2 → 이미지 생성
-* 모든 서버 동일 환경 유지
-
----
-
-### Auto Scaling Group
-
-* Launch Template 사용
-* ALB와 연결
-
-✔️ 트래픽 증가 → 자동 확장
-✔️ 장애 발생 → 자동 교체
-
----
-
-## 📄 Configuration
-
-### CloudWatch Agent
-
-📍 `/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json`
-
+로그 정책
+/home/ec2-user/worldpay.log
+/health 로그 제외
+###📄 Configuration Samples
 ```json
 {
   "logs": {
@@ -192,7 +149,7 @@ sudo systemctl restart amazon-cloudwatch-agent
         "collect_list": [
           {
             "file_path": "/home/ec2-user/worldpay.log",
-            "log_group_name": "worldpay",
+            "log_group_name": "international-pay-logs",
             "log_stream_name": "{instance_id}",
             "timestamp_format": "%Y-%m-%d %H:%M:%S",
             "filters": [
@@ -208,27 +165,3 @@ sudo systemctl restart amazon-cloudwatch-agent
   }
 }
 ```
-
----
-
-## 🧠 Design Philosophy
-
-> “서버는 늘어나도, 복잡성은 늘어나면 안 된다.”
-
-* 불변 인프라 (Immutable Infrastructure)
-* 자동 복구 (Self-healing)
-* 최소 권한 원칙 (Least Privilege)
-
----
-
-
-
-## 🏁 Summary
-
-이 구조는 단순한 서버 배포가 아니라:
-
-👉 **“실제 서비스 운영 가능한 수준의 클라우드 아키텍처”**
-
-를 목표로 설계되었습니다.
-
----
