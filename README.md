@@ -129,6 +129,10 @@ python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passl
 
 ## 💾 Database
 
+### 서브넷 그룹 설정
+-vpc-2 ,가용영역 a,b의 서브넷 체크
+
+
 ### Aurora 설정
 
 - **Engine**: Aurora MySQL (MySQL 8.0 호환)
