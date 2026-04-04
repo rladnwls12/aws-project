@@ -130,6 +130,7 @@ Launch Template 적용
 ASG 배포
 ###📊 Logging & Monitoring
 CloudWatch Agent
+```bash
 sudo dnf install amazon-cloudwatch-agent -y
 
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
@@ -139,7 +140,8 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 sudo systemctl restart amazon-cloudwatch-agent
 로그 정책
 /home/ec2-user/worldpay.log
-/health 로그 제외
+```
+
 ###📄 Configuration Samples
 ```json
 {
@@ -155,7 +157,7 @@ sudo systemctl restart amazon-cloudwatch-agent
             "filters": [
               {
                 "type": "exclude",
-                "expression": ".*\\/health.*"
+                "expression": ".*\\/health.*" 
               }
             ]
           }
