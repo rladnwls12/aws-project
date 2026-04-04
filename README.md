@@ -77,7 +77,7 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 - **VPC-2 (데이터베이스 VPC)**
   - DB Subnet: RDS Aurora Multi-AZ 배치, **인터넷 통신 완전 차단**
 - **VPC Peering**: VPC-1 Private Subnet ↔ VPC-2 DB Subnet 간 내부 통신만 허용
-  - 라우팅 테이블에 Peering 경로 반드시 추가 필요
+  - 라우팅 테이블에 **Peering 경로** 반드시 추가 필요
 
 ### 보안 그룹
 
