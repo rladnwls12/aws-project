@@ -134,6 +134,9 @@ python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passl
 - KMS CMK 기반 스토리지 암호화
 - DB 직접 외부 접근 차단
 
+### 로그 수집
+- **모두 체크**
+
 ### 가용성
 
 - 자동 백업 활성화 (≥ 7일)
