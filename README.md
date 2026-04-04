@@ -238,6 +238,4 @@ sudo systemctl restart amazon-cloudwatch-agent
 
 ---
 
-*이제 이걸 GitHub에 올리면, 보는 사람은 이렇게 생각할 거다.*
 
-> “이거 만든 사람… 실무 해봤네.” 😏
