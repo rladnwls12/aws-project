@@ -92,6 +92,13 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 
 ---
 
+### KMS CMK 생성
+
+| 구분 | 주요 암호화 대상 | 필요한 IAM 권한 (EC2 Role) | 비고 |
+|------|----------------|---------------------------|------|
+| DB CMK | RDS Aurora Storage, Snapshots | (필요 없음) | RDS 서비스가 내부적으로 사용 |
+| App CMK | Secrets Manager | `kms:Decrypt` | 
+
 
 ## 💻 Compute & Application
 
