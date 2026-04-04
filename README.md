@@ -84,11 +84,10 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 
 | 대상 | 포트 | 허용 소스 | VPC |
 |------|------|-----------|-----|
-| Bastion SG | 22 | 관리자 IP | VPC-1 |
-| ALB SG | 80, 443 | 0.0.0.0/0 | VPC-1 |
-| App SG | 8000 | ALB SG | VPC-1 |
-| App SG | 22 | Bastion SG | VPC-1 |
-| DB SG | 3306 | App SG (VPC-1 CIDR) | VPC-2 |
+| Bastion SG | 22 | 0.0.0.0 | VPC-1 |
+| ALB SG | 80, 443 | 0.0.0.0 | VPC-1 |
+| App SG | 8000,22 | 0.0.0.0 | VPC-1 |
+| DB SG | 3306 | (VPC-1 CIDR) | VPC-2 |
 
 ---
 
