@@ -342,8 +342,8 @@ ASG가 인스턴스를 생성할 때 사용할 "설계도"입니다.
 | 설정 항목 | 권장 설정 값 | 비고 |
 |-----------|-------------|------|
 | AMI ID | 위에서 생성한 Custom AMI | 버전 관리를 통해 롤백 지원 |
-| Instance Type | t3.medium (최소 t3.small 이상) | CPU/Memory 집약도에 따라 선택 |
-| IAM Instance Profile | InternationalPay-App-Role | Secrets Manager, CloudWatch 권한 포함 |
+| Instance Type | t3.medium (지정된 거로) | CPU/Memory 집약도에 따라 선택 |
+| IAM Instance Profile | [님이 만든 Iam 역활] | Secrets Manager, CloudWatch 권한 포함 |
 | Security Groups | App-SG (80,8000 포트 허용) | ALB로부터의 인바운드만 허용 권장 |
 | 암호화 활성화(KMS) | 성능 및 보안 준수 |
 
