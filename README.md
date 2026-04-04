@@ -100,8 +100,8 @@
 #### 패키지 설치
 
 ```bash
-sudo yum install python-pip -y
-pip3 install fastapi uvicorn
+sudo yum install python3.12 python-pip -y
+pip3 install fastapi uvicorn boto3 
 ```
 
 ---
