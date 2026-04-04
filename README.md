@@ -305,30 +305,7 @@ sudo systemctl restart amazon-cloudwatch-agent
 }
 ```
 
----
 
-## 🧠 Design Philosophy
-
-- **보안 우선**: 모든 컴포넌트는 최소 권한 원칙에 따라 격리
-- **고가용성**: ALB + ASG를 통한 무중단 확장 및 자동 복구
-- **운영 자동화**: Systemd & CloudWatch로 수동 개입 최소화
-- **일관성 있는 배포**: AMI → Launch Template → ASG 파이프라인으로 환경 드리프트 방지
-- **Zero Downtime**: Instance Refresh로 가동 중 순차 교체, 다운타임 없음
-
----
-
-## 🏁 Summary
-
-| 항목 | 내용 |
-|------|------|
-| 런타임 | Python 3.12 + FastAPI + Uvicorn |
-| 컴퓨팅 | EC2 + ASG + ALB |
-| 데이터베이스 | Aurora MySQL 8.0 (Multi-AZ) |
-| 보안 | KMS CMK, VPC, Secrets Manager |
-| 모니터링 | CloudWatch Logs + Agent |
-| 배포 방식 | AMI 기반 Launch Template + Instance Refresh |
-
----
 
 ## ☁️ ALB / Target Group / ASG 상세 설정
 
@@ -392,3 +369,28 @@ ALB가 트래픽을 전달할 목적지들의 집합입니다.
   - Metric: Average CPU Utilization
   - Target Value: **50%**
   - Warm-up Time: 300초 권장 (과도한 확장 방지)
+ 
+---
+
+## 🧠 Design Philosophy
+
+- **보안 우선**: 모든 컴포넌트는 최소 권한 원칙에 따라 격리
+- **고가용성**: ALB + ASG를 통한 무중단 확장 및 자동 복구
+- **운영 자동화**: Systemd & CloudWatch로 수동 개입 최소화
+- **일관성 있는 배포**: AMI → Launch Template → ASG 파이프라인으로 환경 드리프트 방지
+- **Zero Downtime**: Instance Refresh로 가동 중 순차 교체, 다운타임 없음
+
+---
+
+## 🏁 Summary
+
+| 항목 | 내용 |
+|------|------|
+| 런타임 | Python 3.12 + FastAPI + Uvicorn |
+| 컴퓨팅 | EC2 + ASG + ALB |
+| 데이터베이스 | Aurora MySQL 8.0 (Multi-AZ) |
+| 보안 | KMS CMK, VPC, Secrets Manager |
+| 모니터링 | CloudWatch Logs + Agent |
+| 배포 방식 | AMI 기반 Launch Template + Instance Refresh |
+
+---
