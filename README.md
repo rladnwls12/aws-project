@@ -35,35 +35,59 @@
 
 ## 🏗 Architecture
 
+웹/애플리케이션 계층과 데이터베이스 계층을 **단일 VPC에 두지 않고, 총 2개의 개별 VPC로 분리**하여 보안 수준을 높입니다.  
+외부 인터넷과 통신하는 애플리케이션 환경(VPC-1)과 내부에서만 통신하는 데이터베이스 환경(VPC-2)을 분리하며, 두 환경은 **VPC Peering**을 통해 논리적으로 연결됩니다.
+
 ```
-User → ALB (Public) → EC2 ASG (Private) → Aurora DB (Isolated)
+인터넷 사용자
+    ↓
+ALB (VPC-1 Public Subnet AZ-a/b)
+    ↓
+EC2 ASG (VPC-1 Private Subnet AZ-a/b)
+    ↓ [VPC Peering]
+RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 ```
+
+### VPC 구성
+
+| VPC | 역할 | 서브넷 구성 |
+|-----|------|------------|
+| VPC-1 (애플리케이션) | 외부 트래픽 수신 및 앱 처리 | Public Subnet (AZ-a/b) — ALB<br>Private Subnet (AZ-a/b) — EC2 ASG |
+| VPC-2 (데이터베이스) | DB 전용 격리 환경 | DB Subnet — RDS Multi-AZ (인터넷 통신 없음) |
 
 ### 구성 요소
 
 | 컴포넌트 | 역할 |
 |----------|------|
-| ALB | 트래픽 분산 |
-| ASG | 자동 확장 및 장애 복구 |
-| Aurora | 데이터 저장 및 복구 지원 |
+| ALB | 트래픽 분산 (VPC-1 Public Subnet) |
+| ASG | 자동 확장 및 장애 복구 (VPC-1 Private Subnet) |
+| VPC Peering | VPC-1 ↔ VPC-2 내부 통신 연결 |
+| Aurora | 데이터 저장 및 복구 (VPC-2, 인터넷 차단) |
 | CloudWatch | 로그 및 모니터링 |
 
 ---
 
 ## 🔐 Security & Network
 
-### 네트워크
+### 네트워크 구성
 
-- Public / Private Subnet 분리
-- VPC 내부 통신
+- **VPC-1 (애플리케이션 VPC)**
+  - Public Subnet (AZ-a, AZ-b): ALB 배치
+  - Private Subnet (AZ-a, AZ-b): EC2 ASG 배치, NAT Gateway를 통한 외부 통신
+- **VPC-2 (데이터베이스 VPC)**
+  - DB Subnet: RDS Aurora Multi-AZ 배치, **인터넷 통신 완전 차단**
+- **VPC Peering**: VPC-1 Private Subnet ↔ VPC-2 DB Subnet 간 내부 통신만 허용
+  - 라우팅 테이블에 Peering 경로 반드시 추가 필요
 
 ### 보안 그룹
 
-| 대상 | 포트 | 허용 |
-|------|------|------|
-| Bastion | 22 | 관리자 IP |
-| App | 8000 | [자유 Default: 0.0.0.0] |
-| DB | 3306 | [자유 Default: main.vpc IP] |
+| 대상 | 포트 | 허용 소스 | VPC |
+|------|------|-----------|-----|
+| Bastion SG | 22 | 관리자 IP | VPC-1 |
+| ALB SG | 80, 443 | 0.0.0.0/0 | VPC-1 |
+| App SG | 8000 | ALB SG | VPC-1 |
+| App SG | 22 | Bastion SG | VPC-1 |
+| DB SG | 3306 | App SG (VPC-1 CIDR) | VPC-2 |
 
 ---
 
@@ -72,8 +96,8 @@ User → ALB (Public) → EC2 ASG (Private) → Aurora DB (Isolated)
 ### Aurora 설정
 
 - **Engine**: Aurora MySQL (MySQL 8.0 호환)
-- **배치**: Private Subnet (Multi-AZ)
-- **접근**: App Server만 허용
+- **배치**: VPC-2 DB Subnet (Multi-AZ), 인터넷 접근 완전 차단
+- **접근**: VPC Peering을 통한 VPC-1 App Server만 허용
 
 ### 보안
 
@@ -305,7 +329,30 @@ sudo systemctl restart amazon-cloudwatch-agent
 }
 ```
 
+---
 
+## 🧠 Design Philosophy
+
+- **보안 우선**: 모든 컴포넌트는 최소 권한 원칙에 따라 격리
+- **고가용성**: ALB + ASG를 통한 무중단 확장 및 자동 복구
+- **운영 자동화**: Systemd & CloudWatch로 수동 개입 최소화
+- **일관성 있는 배포**: AMI → Launch Template → ASG 파이프라인으로 환경 드리프트 방지
+- **Zero Downtime**: Instance Refresh로 가동 중 순차 교체, 다운타임 없음
+
+---
+
+## 🏁 Summary
+
+| 항목 | 내용 |
+|------|------|
+| 런타임 | Python 3.12 + FastAPI + Uvicorn |
+| 컴퓨팅 | EC2 + ASG + ALB |
+| 데이터베이스 | Aurora MySQL 8.0 (Multi-AZ) |
+| 보안 | KMS CMK, VPC, Secrets Manager |
+| 모니터링 | CloudWatch Logs + Agent |
+| 배포 방식 | AMI 기반 Launch Template + Instance Refresh |
+
+---
 
 ## ☁️ ALB / Target Group / ASG 상세 설정
 
@@ -341,11 +388,12 @@ ALB가 트래픽을 전달할 목적지들의 집합입니다.
 
 사용자의 요청을 받아 가용한 인스턴스로 분산합니다.
 
-- **Scheme**: Internet-facing (Public Subnets 배치)
+- **Scheme**: Internet-facing
+- **배치**: VPC-1 Public Subnet (AZ-a, AZ-b) 각각 선택
 - **Listeners**:
   - HTTP (80): HTTPS(443)로 Redirect 권장
   - HTTPS (443): ACM 인증서 적용 필수
-- **Security Group**: ALB-SG
+- **Security Group**: ALB-SG (새로 생성)
   - Inbound: `0.0.0.0/0` (80, 443)
   - Outbound: App-SG (8000)
 - **Idle Timeout**: 60초 (표준)
@@ -356,7 +404,7 @@ ALB가 트래픽을 전달할 목적지들의 집합입니다.
 
 | 설정 항목 | 권장 설정 값 | 비고 |
 |-----------|-------------|------|
-| VPC & Subnets | Private Subnets (A, C) | 보안을 위해 외부 직접 노출 차단 |
+| VPC & Subnets | VPC-1 Private Subnets (AZ-a, AZ-b) | 보안을 위해 외부 직접 노출 차단 |
 | Desired Capacity | 2 | 최소 가용성 확보 (Multi-AZ) |
 | Minimum Capacity | 2 | 장애 시에도 서비스 유지 |
 | Maximum Capacity | 4~6 | 트래픽 폭증 대비 상한선 |
@@ -369,28 +417,3 @@ ALB가 트래픽을 전달할 목적지들의 집합입니다.
   - Metric: Average CPU Utilization
   - Target Value: **50%**
   - Warm-up Time: 300초 권장 (과도한 확장 방지)
- 
----
-
-## 🧠 Design Philosophy
-
-- **보안 우선**: 모든 컴포넌트는 최소 권한 원칙에 따라 격리
-- **고가용성**: ALB + ASG를 통한 무중단 확장 및 자동 복구
-- **운영 자동화**: Systemd & CloudWatch로 수동 개입 최소화
-- **일관성 있는 배포**: AMI → Launch Template → ASG 파이프라인으로 환경 드리프트 방지
-- **Zero Downtime**: Instance Refresh로 가동 중 순차 교체, 다운타임 없음
-
----
-
-## 🏁 Summary
-
-| 항목 | 내용 |
-|------|------|
-| 런타임 | Python 3.12 + FastAPI + Uvicorn |
-| 컴퓨팅 | EC2 + ASG + ALB |
-| 데이터베이스 | Aurora MySQL 8.0 (Multi-AZ) |
-| 보안 | KMS CMK, VPC, Secrets Manager |
-| 모니터링 | CloudWatch Logs + Agent |
-| 배포 방식 | AMI 기반 Launch Template + Instance Refresh |
-
----
