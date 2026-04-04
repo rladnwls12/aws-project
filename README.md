@@ -152,7 +152,7 @@ mysql -h worldpay-db.cluster-creegaqoksh3.ap-northeast-2.rds.amazonaws.com \
   - KMS - `kms:Decrypt`
   - CloudWatch Logs - `logs:CreateLogStream`, `logs:PutLogEvents`  
     `#클라우드 워치 로그 그룹 만든다음에 arn 주소 복붙`
-
+-**인스턴스 프로파일 권한 부여**
 ### 환경 설치
 
 ```bash
@@ -343,7 +343,7 @@ ASG가 인스턴스를 생성할 때 사용할 "설계도"입니다.
 |-----------|-------------|------|
 | AMI ID | 위에서 생성한 Custom AMI | 버전 관리를 통해 롤백 지원 |
 | Instance Type | t3.medium (지정된 거로) | CPU/Memory 집약도에 따라 선택 |
-| IAM Instance Profile | [님이 만든 Iam 역활] | Secrets Manager, CloudWatch 권한 포함 |
+| IAM Instance Profile | **[님이 만든 Iam 역활]** | Secrets Manager, CloudWatch 권한 포함 |
 | Security Groups | App-SG (80,8000 포트 허용) | ALB로부터의 인바운드만 허용 권장 |
 | 암호화 활성화(KMS) | 성능 및 보안 준수 |
 
@@ -381,6 +381,8 @@ ALB가 트래픽을 전달할 목적지들의 집합입니다.
 | Desired Capacity | 2 | 최소 가용성 확보 (Multi-AZ) |
 | Minimum Capacity | 2 | 장애 시에도 서비스 유지 |
 | Maximum Capacity | 4~6 | 트래픽 폭증 대비 상한선 |
+| 추가 설정 | CloudWatch 그룹 지표 수집 활성화 | 로그 쌓기 위함 |
+
 
 #### 📈 Scaling Policy
 
