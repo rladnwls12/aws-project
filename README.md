@@ -221,15 +221,7 @@ sudo systemctl restart amazon-cloudwatch-agent
 
 ---
 
-## ⚡ Next Step (추천 발전 방향)
 
-* Terraform으로 IaC 전환
-* CI/CD (GitHub Actions)
-* Blue/Green Deployment
-* Redis 캐시 추가
-* WAF 적용
-
----
 
 ## 🏁 Summary
 
