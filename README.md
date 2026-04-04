@@ -1,4 +1,4 @@
-# 🌍 Worldpay Service - AWS Infrastructure & Deployment
+# 🌍 InternationalPay  Service - AWS Infrastructure & Deployment
 
 > 확장 가능하고, 안전하며, 자동화된 결제 서비스 인프라 구축
 > FastAPI 기반 애플리케이션 + AWS 클라우드 아키텍처
