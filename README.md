@@ -10,15 +10,16 @@
 1. [📌 Overview](#-overview)
 2. [🏗 Architecture](#-architecture)
 3. [🔐 Security & Network](#-security--network)
-4. [💾 Database](#-database)
-5. [💻 Compute & Application](#-compute--application)
+4. [💻 Compute & Application](#-compute--application)
+5.  [💾 Database](#-database)
 6. [🧪 개발 및 테스트](#-개발-및-테스트)
 7. [⚙️ Deployment & Scaling](#️-deployment--scaling)
 8. [📊 Logging & Monitoring](#-logging--monitoring)
 9. [📄 Configuration Samples](#-configuration-samples)
-10. [🧠 Design Philosophy](#-design-philosophy)
-11. [🏁 Summary](#-summary)
-12. [☁️ ALB / Target Group / ASG 상세 설정](#️-alb--target-group--asg-상세-설정)
+10. [☁️ ALB / Target Group / ASG 상세 설정](#️-alb--target-group--asg-상세-설정)
+11. [🧠 Design Philosophy](#-design-philosophy)
+12. [🏁 Summary](#-summary)
+
 
 ---
 
