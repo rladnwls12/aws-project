@@ -18,6 +18,7 @@
 9. [📄 Configuration Samples](#-configuration-samples)
 10. [🧠 Design Philosophy](#-design-philosophy)
 11. [🏁 Summary](#-summary)
+12. [☁️ ALB / Target Group / ASG 상세 설정](#️-alb--target-group--asg-상세-설정)
 
 ---
 
@@ -210,67 +211,6 @@ sudo journalctl -u worldpay -f
     shred -u ~/.ssh/authorized_keys
     ```
 
-### 📋 Launch Template (시작 템플릿)
-
-ASG가 인스턴스를 생성할 때 사용할 "설계도"입니다.
-
-| 설정 항목 | 권장 설정 값 | 비고 |
-|-----------|-------------|------|
-| AMI ID | 위에서 생성한 Custom AMI | 버전 관리를 통해 롤백 지원 |
-| Instance Type | t3.medium (최소 t3.small 이상) | CPU/Memory 집약도에 따라 선택 |
-| IAM Instance Profile | InternationalPay-App-Role | Secrets Manager, CloudWatch 권한 포함 |
-| Security Groups | App-SG (8000 포트 허용) | ALB로부터의 인바운드만 허용 권장 |
-| User Data | `systemctl start amazon-cloudwatch-agent` | 부팅 시 에이전트 재확인 스크립트 |
-| Storage (EBS) | 20GB+, gp3, 암호화 활성화(KMS) | 성능 및 보안 준수 |
-
-### 🎯 Target Group (대상 그룹)
-
-ALB가 트래픽을 전달할 목적지들의 집합입니다.
-
-- **Target Type**: Instances
-- **Protocol / Port**: HTTP / 8000
-- **Health Check**:
-  - Path: `/health` (FastAPI 앱 내에 구현 필수)
-  - Healthy Threshold: 3회
-  - Unhealthy Threshold: 2회
-  - Interval: 30초
-  - Success Codes: 200
-- **Attributes**:
-  - Deregistration Delay: 60~120초 (진행 중인 요청 처리 시간 확보)
-
-### ⚖️ ALB (Application Load Balancer)
-
-사용자의 요청을 받아 가용한 인스턴스로 분산합니다.
-
-- **Scheme**: Internet-facing (Public Subnets 배치)
-- **Listeners**:
-  - HTTP (80): HTTPS(443)로 Redirect 권장
-  - HTTPS (443): ACM 인증서 적용 필수
-- **Security Group**: ALB-SG
-  - Inbound: `0.0.0.0/0` (80, 443)
-  - Outbound: App-SG (8000)
-- **Idle Timeout**: 60초 (표준)
-
-### 🔄 ASG (Auto Scaling Group)
-
-부하에 따라 인스턴스 개수를 자동으로 조절하고 고가용성을 유지합니다.
-
-| 설정 항목 | 권장 설정 값 | 비고 |
-|-----------|-------------|------|
-| VPC & Subnets | Private Subnets (A, C) | 보안을 위해 외부 직접 노출 차단 |
-| Desired Capacity | 2 | 최소 가용성 확보 (Multi-AZ) |
-| Minimum Capacity | 2 | 장애 시에도 서비스 유지 |
-| Maximum Capacity | 4~6 | 트래픽 폭증 대비 상한선 |
-| Health Check Type | ELB | 앱 응답 기반 검사 |
-| Termination Policy | OldestInstance | 배포 시 구버전 인스턴스 우선 삭제 |
-
-#### 📈 Scaling Policy
-
-- **Target Tracking Scaling**
-  - Metric: Average CPU Utilization
-  - Target Value: **50%**
-  - Warm-up Time: 300초 권장 (과도한 확장 방지)
-
 ### Systemd 서비스 등록 및 관리
 
 앱을 백그라운드 서비스로 등록하여 자동 실행되도록 설정합니다.
@@ -387,3 +327,68 @@ sudo systemctl restart amazon-cloudwatch-agent
 | 보안 | KMS CMK, VPC, Secrets Manager |
 | 모니터링 | CloudWatch Logs + Agent |
 | 배포 방식 | AMI 기반 Launch Template + Instance Refresh |
+
+---
+
+## ☁️ ALB / Target Group / ASG 상세 설정
+
+### 📋 Launch Template (시작 템플릿)
+
+ASG가 인스턴스를 생성할 때 사용할 "설계도"입니다.
+
+| 설정 항목 | 권장 설정 값 | 비고 |
+|-----------|-------------|------|
+| AMI ID | 위에서 생성한 Custom AMI | 버전 관리를 통해 롤백 지원 |
+| Instance Type | t3.medium (최소 t3.small 이상) | CPU/Memory 집약도에 따라 선택 |
+| IAM Instance Profile | InternationalPay-App-Role | Secrets Manager, CloudWatch 권한 포함 |
+| Security Groups | App-SG (8000 포트 허용) | ALB로부터의 인바운드만 허용 권장 |
+| User Data | `systemctl start amazon-cloudwatch-agent` | 부팅 시 에이전트 재확인 스크립트 |
+| Storage (EBS) | 20GB+, gp3, 암호화 활성화(KMS) | 성능 및 보안 준수 |
+
+### 🎯 Target Group (대상 그룹)
+
+ALB가 트래픽을 전달할 목적지들의 집합입니다.
+
+- **Target Type**: Instances
+- **Protocol / Port**: HTTP / 8000
+- **Health Check**:
+  - Path: `/health` (FastAPI 앱 내에 구현 필수)
+  - Healthy Threshold: 3회
+  - Unhealthy Threshold: 2회
+  - Interval: 30초
+  - Success Codes: 200
+- **Attributes**:
+  - Deregistration Delay: 60~120초 (진행 중인 요청 처리 시간 확보)
+
+### ⚖️ ALB (Application Load Balancer)
+
+사용자의 요청을 받아 가용한 인스턴스로 분산합니다.
+
+- **Scheme**: Internet-facing (Public Subnets 배치)
+- **Listeners**:
+  - HTTP (80): HTTPS(443)로 Redirect 권장
+  - HTTPS (443): ACM 인증서 적용 필수
+- **Security Group**: ALB-SG
+  - Inbound: `0.0.0.0/0` (80, 443)
+  - Outbound: App-SG (8000)
+- **Idle Timeout**: 60초 (표준)
+
+### 🔄 ASG (Auto Scaling Group)
+
+부하에 따라 인스턴스 개수를 자동으로 조절하고 고가용성을 유지합니다.
+
+| 설정 항목 | 권장 설정 값 | 비고 |
+|-----------|-------------|------|
+| VPC & Subnets | Private Subnets (A, C) | 보안을 위해 외부 직접 노출 차단 |
+| Desired Capacity | 2 | 최소 가용성 확보 (Multi-AZ) |
+| Minimum Capacity | 2 | 장애 시에도 서비스 유지 |
+| Maximum Capacity | 4~6 | 트래픽 폭증 대비 상한선 |
+| Health Check Type | ELB | 앱 응답 기반 검사 |
+| Termination Policy | OldestInstance | 배포 시 구버전 인스턴스 우선 삭제 |
+
+#### 📈 Scaling Policy
+
+- **Target Tracking Scaling**
+  - Metric: Average CPU Utilization
+  - Target Value: **50%**
+  - Warm-up Time: 300초 권장 (과도한 확장 방지)
