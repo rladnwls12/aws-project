@@ -91,6 +91,33 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 
 ---
 
+
+## 💻 Compute & Application
+
+### Bastion
+
+- SSH 접근 서버
+- EIP 사용
+
+### Application Server
+
+- AMI 기반 배포
+- IAM Role:
+  - Secrets Manager - `GetSecretValue`  
+    `#리소스 추가에서 SecretId에 /secret/db-* 으로 적용`
+  - KMS - `kms:Decrypt`
+  - CloudWatch Logs - `logs:CreateLogStream`, `logs:PutLogEvents`  
+    `#클라우드 워치 로그 그룹 만든다음에 arn 주소 복붙`
+-**인스턴스 프로파일 권한 부여**
+### 환경 설치
+
+```bash
+sudo dnf install -y mariadb1011 python3.12 python3.12-pip
+python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passlib uvicorn
+```
+
+---
+
 ## 💾 Database
 
 ### Aurora 설정
@@ -133,33 +160,6 @@ nslookup worldpay-db-instance-1.creegaqoksh3.ap-northeast-2.rds.amazonaws.com
 mysql -h worldpay-db.cluster-creegaqoksh3.ap-northeast-2.rds.amazonaws.com \
   -P 3306 -u admin -p
 ```
-
----
-
-## 💻 Compute & Application
-
-### Bastion
-
-- SSH 접근 서버
-- EIP 사용
-
-### Application Server
-
-- AMI 기반 배포
-- IAM Role:
-  - Secrets Manager - `GetSecretValue`  
-    `#리소스 추가에서 SecretId에 /secret/db-* 으로 적용`
-  - KMS - `kms:Decrypt`
-  - CloudWatch Logs - `logs:CreateLogStream`, `logs:PutLogEvents`  
-    `#클라우드 워치 로그 그룹 만든다음에 arn 주소 복붙`
--**인스턴스 프로파일 권한 부여**
-### 환경 설치
-
-```bash
-sudo dnf install -y mariadb1011 python3.12 python3.12-pip
-python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passlib uvicorn
-```
-
 ---
 
 ## 🧪 개발 및 테스트
