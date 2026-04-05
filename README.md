@@ -75,6 +75,7 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 - **VPC-1 (애플리케이션 VPC)**
   - Public Subnet (AZ-a, AZ-b): ALB 배치
   - Private Subnet (AZ-a, AZ-b): EC2 ASG 배치, NAT Gateway를 통한 외부 통신
+  - Vpc 등으로 생성 및 이름 태그 자동 생성 OFF & 서브넷 CIDR 블록 사용자지정 4개의 서브넷 생성
 - **VPC-2 (데이터베이스 VPC)**
   - DB Subnet: RDS Aurora Multi-AZ 배치, **인터넷 통신 완전 차단**
 - **VPC Peering**: VPC-1 Private Subnet ↔ VPC-2 DB Subnet 간 내부 통신만 허용
