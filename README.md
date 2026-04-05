@@ -206,7 +206,7 @@ pip3.12 install -r requirements.txt
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-별도 터미널에서 API 응답을 확인합니다.
+(Duplicate) 별도 터미널에서 API 응답을 확인합니다.
 
 ```bash
 # 유저 생성
