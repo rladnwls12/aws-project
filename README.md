@@ -121,6 +121,7 @@ RDS Aurora (VPC-2 DB Subnet, Multi-AZ / 인터넷 통신 없음)
 ### 환경 설치
 
 ```bash
+ssh [private ec2 ip]
 sudo dnf install -y mariadb1011 python3.12 python3.12-pip
 python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passlib uvicorn
 ```
