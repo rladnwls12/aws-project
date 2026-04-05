@@ -276,7 +276,6 @@ WorkingDirectory=/home/ec2-user
 ExecStart=/home/ec2-user/.local/bin/uvicorn main:app --host 0.0.0.0 --port 8000
 StandardOutput=append:/home/ec2-user/worldpay.log
 Restart=always
-TimeoutStopSec=30
 
 [Install]
 WantedBy=multi-user.target
