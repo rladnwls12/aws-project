@@ -482,6 +482,19 @@ graph LR
 - **Maximum = 4~6**
 - Multi-AZ로 구성
 
+ami 만들기
+
+시작 템플릿 만들기(ami **인스턴스 유형** vpc key app-sg)
+
+대상그룹 만들기 ( port 8000, health)
+
+ALB (퍼블릭에생성 , 보안그룹  생성 http:80 )
+
+ASG (프라이빗에 생ㅅ어 대상크기 조정,그룹 지표 활성화)
+
+
+
+
 ### 7.4 Launch Template
 | 항목 | 내용 |
 |---|---|
