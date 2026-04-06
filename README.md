@@ -267,6 +267,50 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 ```
 
 ---
+## 8. 로깅 및 모니터링
+
+### 8.1 CloudWatch Agent
+- EC2에 설치하여 시스템 로그와 애플리케이션 로그를 수집한다.
+- `worldpay.log`를 CloudWatch Logs로 전송한다.
+- `/health` 관련 로그는 제외 필터를 둘 수 있다.
+
+### 8.2 설정 파일 예시
+`/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json`
+
+```json
+{
+"logs":{
+    "logs_collected": {
+    "files": {
+            "collect_list": [
+                   {
+                        "file_path": "/home/ec2-user/worldpay.log",
+                       "log_group_name": "worldpay",
+                       "log_stream_name": "{instance_id}",
+                       "timestamp_format": "%Y-%m-%d %H:%M:%S",
+                       "filters": [
+                        {
+                            "type": "exclude",
+                            "expression": ".*\\/health.*"
+                        }
+                       ]
+                   }
+               ]
+           }
+        }
+  }
+}
+```
+
+### 8.3 로그 확인
+```bash
+tail -f /home/ec2-user/worldpay.log
+sudo journalctl -u worldpay -f
+sudo systemctl status amazon-cloudwatch-agent.service
+```
+
+---
+
 
 ## 5. 데이터베이스
 
@@ -412,49 +456,6 @@ flowchart LR
 
 ---
 
-## 8. 로깅 및 모니터링
-
-### 8.1 CloudWatch Agent
-- EC2에 설치하여 시스템 로그와 애플리케이션 로그를 수집한다.
-- `worldpay.log`를 CloudWatch Logs로 전송한다.
-- `/health` 관련 로그는 제외 필터를 둘 수 있다.
-
-### 8.2 설정 파일 예시
-`/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json`
-
-```json
-{
-"logs":{
-    "logs_collected": {
-    "files": {
-            "collect_list": [
-                   {
-                        "file_path": "/home/ec2-user/worldpay.log",
-                       "log_group_name": "worldpay",
-                       "log_stream_name": "{instance_id}",
-                       "timestamp_format": "%Y-%m-%d %H:%M:%S",
-                       "filters": [
-                        {
-                            "type": "exclude",
-                            "expression": ".*\\/health.*"
-                        }
-                       ]
-                   }
-               ]
-           }
-        }
-  }
-}
-```
-
-### 8.3 로그 확인
-```bash
-tail -f /home/ec2-user/worldpay.log
-sudo journalctl -u worldpay -f
-sudo systemctl status amazon-cloudwatch-agent.service
-```
-
----
 
 ## 9. 배포 체크리스트
 
