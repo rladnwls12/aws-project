@@ -157,6 +157,7 @@ Private Subnet 인스턴스에서 패키지 설치와 CloudWatch Agent 사용을
   - Aurora 저장 데이터 암호화
   - 백업 및 스냅샷 암호화
   - Secrets Manager 연동
+  - **CloudWatch Logs** 키 암호화
 - 핵심 권한은 최소 권한 원칙으로 부여한다.
 
 ---
