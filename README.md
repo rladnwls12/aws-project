@@ -5,7 +5,7 @@
 > - **리전: ap-northeast-2 (서울)** 고정
 > - ALB 상태 검사 포트: **80**
 > - 과제 지급 바이너리 **절대 수정 금지**
-> - 참고(준혁이형 벨로그): [velog.io/@zenru](https://velog.io/@zenru)
+> - # 참고(준혁이형 벨로그): [velog.io/@zenru](https://velog.io/@zenru)
 
 ---
 
