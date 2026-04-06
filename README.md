@@ -327,7 +327,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
             "collect_list": [
                    {
                         "file_path": "/home/ec2-user/worldpay.log",
-                       "log_group_name": "worldpay",
+                       "log_group_name": "[너의 로그 그룹 이름]",
                        "log_stream_name": "{instance_id}",
                        "timestamp_format": "%Y-%m-%d %H:%M:%S",
                        "filters": [
