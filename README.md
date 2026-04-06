@@ -326,7 +326,8 @@ sudo systemctl status amazon-cloudwatch-agent.service
 - **암호화:** KMS CMK 적용
 - **백업:** 자동 백업 
 
-
+다른 AZ에 Aurora 복제본/리더 노드 생성(확장된 가용성에 권장)
+신속한 장애 조치 및 고가용성을 위해 Aurora 복제본 생성
 
 ### 5.3 접근 규칙
 - DB-SG는 **3306/TCP**만 허용
