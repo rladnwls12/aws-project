@@ -7,7 +7,7 @@
 
 ---
 
-### velog.io/@zenru
+### velog.io/@zenru (준혁이 형 벨로그)
 
 ## 목차
 
