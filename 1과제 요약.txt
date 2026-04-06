@@ -1,0 +1,243 @@
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-claoudwatch-agent.json -s
+
+
+1. VPC 생성
+2. VPC 피어링
+	- Private Subnet 끼리만 라우팅
+3. KMS CMK
+	- 각 용도별 생성
+4. AWS Aurora
+	- 서브넷 그룹
+	- KMS 암호화
+	- 백업/PITR(역추적)
+	- 보안그룹 TCP 3306 전체 허용
+5. Bastion EC2
+	- EIP (IP 고정)
+	- 보안그룹 ssh 전체 허용
+6. Test EC2
+	- 보안 그룹 ssh, TCP 8000(앱 포트)
+	- dnf 패키지 python3.12 python3.12-pip 설치
+	- python 패키지 설치 (fastapi boto3 ...)
+	- IAM Role에 권한 부여(Secrets Manager, KMS, CloudWatch Logs)
+	- systemd 서비스 등록
+	- CloudWatch Logs 그룹 생성
+	- CloudWatch Logs 설정 (/opt/aws/amazon-cloudwatch-agent ...)
+	- 재부팅 후 정상 동작 확인
+	- AMI 생성
+7. Target Group + ALB 생성
+8. Launch Template(보안그룹, IAM Role) + Auto Scaling Group 생성
+
+
+ping 1.1.1.1
+ping worldpay-db.cluster-c5o4482ok2z0.ap-northeast-2.rds.amazonaws.com
+nslookup worldpay-db.cluster-c5o4482ok2z0.ap-northeast-2.rds.amazonaws.com
+curl 10.1.1.108
+curl 10.1.1.108:3306
+vim main.py
+ls
+vi main.py
+pip3
+sudo dnf install python3-pip
+vim main.py
+pip install fastapi sqlalchemy pydantic passlib boto3
+python3 main.py
+pip install pymysql
+python3 main.py
+pip install pydantic[email]
+python3 main.py
+pip install uvicorn[standard]
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+python3 main.py
+vim main.py
+sudo dnf install python3.12
+python3 main.py
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
+sudo dnf install python3.12
+sudo dnf install python3.12-pip
+python3.12 -m pip install fastapi sqlalchemy pydantic passlib boto3
+python3.12 main.py
+python3.12 -m pip install pymysql
+python3.12 main.py
+python3.12 -m pip install pydantic[email]
+python3.12 main.py
+python3.12 -m pip install uvicorn[standard]
+python3.12 -m uvicorn main:app --host 0.0.0.0 --port 8000
+sudo dnf install mariadb1011
+mariadb -h worldpay-db.cluster-c5o4482ok2z0.ap-northeast-2.rds.amazonaws.com -u admin -p
+python3.12 -m uvicorn main:app --host 0.0.0.0 --port 8000
+python3.12 -m uvicorn main:app --host 0.0.0.0
+curl localhost:8000/users
+curl -X POST localhost:8000/users -d '{"email":"test@test.com","name}'
+curl -X POST localhost:8000/users -d '{"email":"test@test.com","name":"hong","password":"pass1004"}'
+curl localhost:8000/users
+curl -X POST localhost:8000/users -d '{"email":"test@test.com","name":"hong","password":"pass1004"}'
+curl -X POST localhost:8000/users -H "Content-Type: application/json" -d '{"email":"test@test.com","name":"hong","password":"pass1004"}'
+curl localhost:8000/users
+sudo su -
+sudo vim /etc/systemd/system/dbus.service
+sudo vim /etc/systemd/system/worldpay.service
+which python3.12
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl enable --now worldpay
+sudo systemctl status worldpay.service
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl daemon-reload
+sudo systemctl restart worldpay
+sudo systemctl status worldpay
+sudo systemctl restart worldpay
+sudo systemctl status worldpay
+which uvicorn
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl status worldpay
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl restart worldpay
+sudo systemctl daemon-reload
+sudo systemctl restart worldpay
+sudo systemctl status worldpay
+curl localhost:8000/users
+sudo systemctl status worldpay
+ls
+ll
+ls
+cat main.py
+vim main.py
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl daemon-reload
+sudo systemctl restart worldpay.service
+sudo systemctl status worldpay
+journalctl -u worldpay.service
+sudo systemctl status worldpay
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl daemon-reload
+sudo systemctl restart worldpay.service
+sudo systemctl status worldpay.service
+sudo systemctl restart worldpay.service
+sudo systemctl status worldpay.service
+sudo systemctl stop worldpay.service
+sudo systemctl start worldpay.service
+journalctl -u worldpay.service
+sudo vi /etc/systemd/system/worldpay.service
+sudo systemctl daemon-reload
+sudo systemctl restart worldpay.service
+ls
+cat worldpay.log
+sudo vi /etc/systemd/system/worldpay.service
+sudo systemctl daemon-reload
+sudo systemctl restart worldpay.service
+cat worldpay.log
+curl localhost:8000/users
+cat worldpay.log
+curl localhost:8000/users
+cat worldpay.log
+sudo vi /etc/systemd/system/worldpay.service
+vim worldpay.log
+sudo vim worldpay.log
+cat worldpay.log
+sudo vim worldpay.log
+sudo dnf install amazon-cloudwatch-agent
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent -a wizard
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent -a config-wizard
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent config-wizard
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent -a append-config
+sudo vi /opt/aws/amazon-cloudwatch-agent/etc/amazon-claoudwatch-agent.json
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-claoudwatch-agent.json -s
+sudo systemctl status amazon-cloudwatch-agent.service
+cat /opt/aws/amazon-cloudwatch-agent/bin/config.json
+curl localhost:8000
+curl localhost:8000/health
+curl localhost:8000/health/db
+curl localhost:8000/health
+sudo systemctl status amazon-cloudwatch-agent.service
+cat worldpay.log
+sudo vim /etc/systemd/system/worldpay.service
+sudo systemctl restart worldpay.service
+curl localhost:8000/health
+cat worldpay.log
+curl localhost:8000/health
+cat worldpay.log
+sudo vim /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-claoudwatch-agent.json -s
+curl localhost:8000
+ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-claoudwatch-agent.json -s
+curl localhost:8000
+ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-claoudwatch-agent.json -s
+curl localhost:8000
+cat worldpay.log
+:q
+curl localhost:8000/health
+sudo systemctl restart amazon-cloudwatch-agent.service
+curl localhost:8000/health
+curl localhost:8000/
+curl localhost:8000
+curl localhost:8000/health
+curl localhost:8000/users
+curl localhost:8000/health
+curl localhost:8000/health/db
+curl localhost:8000/
+curl localhost:8000/health
+sudo /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+sudo vim /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+sudo systemctl restart amazon-cloudwatch-agent.service
+curl localhost:8000/users
+sudo systemctl status amazon-cloudwatch-agent.service
+curl localhost:8000
+curl localhost:8000/health
+curl localhost:8000/users
+curl localhost:8000/health
+curl localhost:8000/users
+curl localhost:8000/health
+curl localhost:8000/users
+curl localhost:8000/health
+curl localhost:8000/users
+ls
+cd __pycache__/
+ls
+chmod +x main.cpython-3
+sudo chmod +x main.cpython-3
+sudo chmod +x main.cpython-312.pyc
+./main.cpython-312.pyc
+cd ..
+curl localhost:8000
+
+
+// /etc/systemd/system/{name}.service
+[Unit]
+Description=worldpay service
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user
+ExecStart=/home/ec2-user/.local/bin/uvicorn main:app --host 0.0.0.0 --port 8000
+StandardOutput=append:/home/ec2-user/worldpay.log
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+cloudwatch.json
+{
+"logs":{
+    "logs_collected": {
+    "files": {
+            "collect_list": [
+                   {
+                        "file_path": "/home/ec2-user/worldpay.log",
+                       "log_group_name": "worldpay",
+                       "log_stream_name": "{instance_id}",
+                       "timestamp_format": "%Y-%m-%d %H:%M:%S",
+                       "filters": [
+                        {
+                            "type": "exclude",
+                            "expression": ".*\\/health.*"
+                        }
+                       ]
+                   }
+               ]
+           }
+        }
+  }
+}
