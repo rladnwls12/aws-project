@@ -2,6 +2,7 @@
 
 > **Warning**  
 > systemd,amazon-wizard 문서 작성시 cloudwatch logs 이름같은거 확인
+> ALB 상태검사 80
 
 ---
 
