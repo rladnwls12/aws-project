@@ -458,6 +458,10 @@ curl -X POST localhost:8000/users \
   -d '{"email":"test@test.com","name":"hong","password":"pass1004"}'
 ```
 
+
+# [아마존 에이전트 세팅은 여기 부터](8. 로깅 및 모니터링)
+
+
 ### 6.5 장애 발생 시 점검 순서
 ```bash
 # 1. 헬스체크 직접 확인
@@ -476,6 +480,10 @@ nslookup worldpay-db.cluster-xxxxxxxx.ap-northeast-2.rds.amazonaws.com
 sudo systemctl status amazon-cloudwatch-agent.service
 ```
 
+
+
+
+
 **주요 디버깅 포인트**
 - `main.py` 실행 에러
 - DB 접속 실패 (Secrets Manager / 보안 그룹 / VPC Peering 라우팅)
@@ -483,6 +491,8 @@ sudo systemctl status amazon-cloudwatch-agent.service
 - systemd 서비스 경로 오류
 - CloudWatch 로그 미전송
 - NAT Gateway 누락으로 인한 패키지 설치 실패
+
+  
 
 ---
 
