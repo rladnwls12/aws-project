@@ -398,6 +398,7 @@ sudo systemctl status amazon-cloudwatch-agent.service
   - CloudWatch Agent 동작 확인
   - 로그 파일 권한 확인
   - 불필요한 파일 정리
+    
 
 ### 7.6 배포 흐름
 ```mermaid
