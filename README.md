@@ -163,7 +163,7 @@ Private Subnet 인스턴스에서 패키지 설치와 CloudWatch Agent 사용을
 
 ## 4. 컴퓨팅 구성
 
-## 5. DB 생성부터 
+### 5. DB 생성부터 
 
 ### 4.1 Bastion EC2
 - **Public Subnet**에 배치
