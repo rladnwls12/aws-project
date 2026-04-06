@@ -507,7 +507,7 @@ sudo systemctl status amazon-cloudwatch-agent.service
       ↓
 ③ 대상 그룹 생성 (포트 8000, /health)
       ↓
-④ ALB 생성 (퍼블릭 서브넷 2개, alb-sg, 대상그룹 연결)
+④ ALB 생성 (퍼블릭 서브넷 2개, alb-sg, 대상그룹 연결, 리스너: **80**)
       ↓
 ⑤ AMI 생성 (Template EC2 기반)
       ↓
