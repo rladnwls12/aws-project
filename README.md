@@ -6,7 +6,7 @@
 > - ALB 상태 검사 포트: **80**
 > - 과제 지급 바이너리 **절대 수정 금지**
 > - # 참고(준혁이형 벨로그): [velog.io/@zenru](https://velog.io/@zenru)
-> - # 영상 링크 [https://drive.google.com/file/d/1gUAJleYnJH1r5SzatV0CF80DMowT7DMt/view?usp=drive_link]
+> - # [영상 링크](https://drive.google.com/file/d/1gUAJleYnJH1r5SzatV0CF80DMowT7DMt/view?usp=drive_link)
 
 ---
 
