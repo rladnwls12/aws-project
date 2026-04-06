@@ -289,8 +289,8 @@ WantedBy=multi-user.target
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now worldpay
-sudo systemctl status worldpay.service
 sudo systemctl restart worldpay.service
+sudo systemctl status worldpay.service
 ```
 
 > **경고:** `ExecStart` 경로, 사용자 계정, WorkingDirectory가 틀리면 서비스가 정상 시작되지 않는다.
