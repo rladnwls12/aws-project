@@ -155,7 +155,7 @@ Internet User
 | VPC-2 | 데이터베이스 VPC | DB Subnet (2 AZ) |
 
 ### 3.2 서브넷 설계
-- **Public Subnet:** ALB, Bastion EC2, NAT Gateway
+- **Public Subnet:** ALB, Bastion EC2, NAT Gateway **퍼블릭 IPv4 주소 자동 할당**
 - **Private Subnet:** Application EC2 (외부 통신은 NAT Gateway 경유)
 - **DB Subnet:** Aurora MySQL (외부 인터넷 통신 차단)
 
