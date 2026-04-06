@@ -1,7 +1,7 @@
 # InternationalPay 서비스 AWS 인프라 구축 문서
 
-> **문서 목적**  
-> 업로드된 과제 자료를 통합하여 **보안**, **고가용성**, **확장성**, **자동 배포**, **운영 모니터링** 중심의 실전용 기술 문서로 정리한다.
+> **Warning**  
+> systemd,amazon-wizard 문서 작성시 cloudwatch logs 이름같은거 확인
 
 ---
 
