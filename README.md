@@ -1,7 +1,8 @@
 # InternationalPay 서비스 AWS 인프라 구축 문서
 
-> **Warning**  
+> **Warning!!!!!!!!!!**  
 > systemd,amazon-wizard 문서 작성시 cloudwatch logs 이름같은거 확인
+> # 리전 꼭 확인
 > ALB 상태검사 80
 
 ---
