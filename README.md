@@ -25,6 +25,24 @@
 
 ---
 
+### 구조도
+```mermaid
+graph LR
+  User((Internet User))
+  ALB[ALB\nPublic Subnet]
+  App[EC2 / ASG\nPrivate Subnet]
+  NAT[NAT Gateway]
+  DB[(Aurora MySQL\nVPC-2 DB Subnet)]
+  Bastion[Bastion EC2\nPublic Subnet]
+
+  User --> ALB
+  ALB --> App
+  App --> DB
+  App --> NAT
+  Bastion --> App
+```
+
+
 ## 전체 구축 순서 요약
 
 ```
