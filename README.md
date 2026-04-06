@@ -424,30 +424,25 @@ flowchart LR
 
 ```json
 {
-  "logs": {
+"logs":{
     "logs_collected": {
-      "files": {
-        "collect_list": [
-          {
-            "file_path": "/home/ec2-user/worldpay.log",
-            "log_group_name": "worldpay",
-            "log_stream_name": "{instance_id}",
-            "timestamp_format": "%Y-%m-%d %H:%M:%S",
-            "encoding": "utf-8",
-            "filters": [
-              {
-                "type": "exclude",
-                "expression": ".*GET /health.*"
-              },
-              {
-                "type": "include",
-                "expression": ".*/users.*"
-              }
-            ]
-          }
-        ]
-      }
-    }
+    "files": {
+            "collect_list": [
+                   {
+                        "file_path": "/home/ec2-user/worldpay.log",
+                       "log_group_name": "worldpay",
+                       "log_stream_name": "{instance_id}",
+                       "timestamp_format": "%Y-%m-%d %H:%M:%S",
+                       "filters": [
+                        {
+                            "type": "exclude",
+                            "expression": ".*\\/health.*"
+                        }
+                       ]
+                   }
+               ]
+           }
+        }
   }
 }
 ```
