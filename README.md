@@ -7,6 +7,7 @@
 > - 과제 지급 바이너리 **절대 수정 금지**
 > - # 참고(준혁이형 벨로그): [velog.io/@zenru](https://velog.io/@zenru)
 > - # [영상 링크](https://drive.google.com/file/d/1gUAJleYnJH1r5SzatV0CF80DMowT7DMt/view?usp=drive_link)
+> - # !!! 설정(Systmed , aws agent는 ssh [프라이빗 인스턴스ip] 접속해서 진행 !!!
 
 ---
 
