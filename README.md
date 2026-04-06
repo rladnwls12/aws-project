@@ -252,7 +252,8 @@ KMS 콘솔 → [키 생성] → 키 구성은 문제 요구사항대로
 | CloudWatch 설정 파일 | `/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json` |
 
 ```bash
-# 기본 작업 위치
+# 들어가기 전에 Allo Agent Fowarding & Pagent 키 추가 설정
+# 기본 작업 위치 
 cd /home/ec2-user
 pwd
 ```
