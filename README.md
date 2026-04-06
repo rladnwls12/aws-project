@@ -448,11 +448,18 @@ sudo systemctl status amazon-cloudwatch-agent.service
 
 ## 7. 배포 및 확장
 
+
+
+
 ### 7.1 ALB
-- **Internet-facing**
-- **Public Subnet**의 두 AZ에 배치
-- HTTP 80 → HTTPS 443 리디렉션 권장
-- HTTPS 사용 시 ACM 인증서 적용
+- **Private Subnet**의 두 AZ에 배치
+
+
+graph LR
+    User((외부 트래픽)) -- "Port 80" --> ALB[ALB <br/> SG: alb-sg]
+    ALB -- "Port 8000" --> EC2[Private EC2 <br/> SG: app-sg]
+
+
 
 ### 7.2 Target Group
 | 항목 | 값 |
@@ -461,6 +468,9 @@ sudo systemctl status amazon-cloudwatch-agent.service
 | Protocol | HTTP |
 | Port | 8000 |
 | Health Check Path | `/health` |
+
+
+
 
 ### 7.3 ASG
 - **Private Subnet**에 배치
@@ -486,6 +496,8 @@ sudo systemctl status amazon-cloudwatch-agent.service
   - 로그 파일 권한 확인
   - 불필요한 파일 정리
     
+
+
 
 ### 7.6 배포 흐름
 ```mermaid
