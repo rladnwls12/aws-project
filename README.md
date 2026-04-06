@@ -219,6 +219,32 @@ KMS 콘솔 → [키 생성] → 키 구성은 문제 요구사항대로
 
 ---
 
+## 🔐 Secrets Manager
+
+애플리케이션에서 사용하는 DB 접속 정보를 안전하게 관리하기 위해 AWS Secrets Manager를 사용한다.
+
+---
+
+## 🧱 2. Secret 생성 (Key-Value 방식)
+
+AWS 콘솔 → Secrets Manager → [새 보안 암호 생성]
+
+### 설정 값
+
+- 유형: Other type of secret
+- 저장 방식: Key-Value
+
+```json
+{
+  "DB_HOST": "worldpay-db.cluster-xxxx.ap-northeast-2.rds.amazonaws.com",
+  "DB_PORT": "3306",
+  "DB_NAME": "worldpay",
+  "DB_USERNAME": "admin",
+  "DB_PASSWORD": "your_password"
+}
+
+```
+
 ## 4. 컴퓨팅 구성
 
 - 하기 전에 [5. 데이터베이스](#5-데이터베이스) 부터 하시길
