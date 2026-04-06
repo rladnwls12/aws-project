@@ -482,6 +482,8 @@ graph LR
 - **Maximum = 4~6**
 - Multi-AZ로 구성
 
+퍼블릭 vpc 자동 할당 활성화 
+
 ami 만들기
 
 시작 템플릿 만들기(ami **인스턴스 유형** vpc key app-sg)
