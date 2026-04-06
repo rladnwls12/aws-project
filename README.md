@@ -432,10 +432,15 @@ flowchart LR
             "log_group_name": "worldpay",
             "log_stream_name": "{instance_id}",
             "timestamp_format": "%Y-%m-%d %H:%M:%S",
+            "encoding": "utf-8",
             "filters": [
               {
                 "type": "exclude",
-                "expression": ".*\\/health.*"
+                "expression": ".*GET /health.*"
+              },
+              {
+                "type": "include",
+                "expression": ".*/users.*"
               }
             ]
           }
