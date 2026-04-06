@@ -368,7 +368,7 @@ curl localhost:8000/health
       "Sid": "CloudWatchLogs",
       "Effect": "Allow",
       "Action": ["logs:CreateLogStream","logs:PutLogEvents"],
-      "Resource": ["arn:aws:logs:ap-northeast-2:[계정ID]:log-group:worldpay:*"]
+      "Resource": ["arn:aws:logs:ap-northeast-2:[계정ID]:log-group:[클라우드 워치 로그 관리의 로그 그룹 이름]:*"]
     }
   ]
 }
