@@ -205,7 +205,7 @@ pwd
 sudo dnf install -y python3.12 python3.12-pip mariadb1011
 python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passlib uvicorn
 ```
-
+```json
 ### 4.5 IAM Role 권한
 애플리케이션 EC2에는 다음 권한이 필요하다.
 
@@ -214,6 +214,47 @@ python3.12 -m pip install fastapi pydantic[email] pymysql boto3 sqlalchemy passl
 | Secrets Manager | `GetSecretValue` | DB 비밀 정보 조회 |
 | KMS | `Decrypt` | 암호화 키 사용 |
 | CloudWatch Logs | `CreateLogStream`, `PutLogEvents` | 로그 전송 |
+
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "Statement1",
+			"Effect": "Allow",
+			"Action": [
+				"secretsmanager:GetSecretValue"
+			],
+			"Resource": [
+				"arn:aws:secretsmanager:ap-northeast-2:600440344359:secret:/secret/db-wVbcxI"
+			]
+		},
+		{
+			"Sid": "Statement2",
+			"Effect": "Allow",
+			"Action": [
+				"kms:Decrypt"
+			],
+			"Resource": [
+				"arn:aws:kms:ap-northeast-2:600440344359:key/62370e39-a264-43fc-a3fc-23222b130995"
+			]
+		},
+		{
+			"Sid": "Statement3",
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogStream",
+				"logs:PutLogEvents"
+			],
+			"Resource": [
+				"arn:aws:logs:ap-northeast-2:600440344359:log-group:worldpay:*"
+			]
+		}
+	]
+}
+```
+
+
 
 ### 4.6 main.py 생성
 ```bash
