@@ -163,6 +163,8 @@ Private Subnet 인스턴스에서 패키지 설치와 CloudWatch Agent 사용을
 
 ## 4. 컴퓨팅 구성
 
+**5. DB 생성부터 **
+
 ### 4.1 Bastion EC2
 - **Public Subnet**에 배치
 - **EIP**를 고정 할당
@@ -268,16 +270,19 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 
 ## 5. 데이터베이스
 
-### 5.1 Aurora MySQL 구성
+### 5.1 DB Subnet Group
+- VPC-2의 **AZ-a / AZ-b 서브넷**을 서브넷 그룹에 포함한다.
+
+
+### 5.2 Aurora MySQL 구성
 - **Engine:** Aurora MySQL
 - **배치:** VPC-2 DB Subnet
 - **가용성:** Multi-AZ
 - **보안:** 인터넷 접근 차단
 - **암호화:** KMS CMK 적용
-- **백업:** 자동 백업 및 PITR 활성화
+- **백업:** 자동 백업 
 
-### 5.2 DB Subnet Group
-- VPC-2의 **AZ-a / AZ-b 서브넷**을 서브넷 그룹에 포함한다.
+
 
 ### 5.3 접근 규칙
 - DB-SG는 **3306/TCP**만 허용
