@@ -204,6 +204,8 @@ VPC 서비스 → [피어링 연결] 탭 → [피어링 연결 생성]
 | App-SG | 22, 8000 | ALB-SG / Bastion-SG | 앱 서버 접근 |
 | DB-SG | 3306 | VPC-1 CIDR | Aurora 접근 |
 
+## 모든 보안 그룹(Security Group)의 Outbound 규칙에 80(HTTP)과 443(HTTPS) 포트로 설정한다!
+
 ### 3.6 KMS CMK (사용자 관리형 키)
 > **핵심:** 암호화 대상 **서비스마다 각각 별도의 KMS 키**를 생성한다.
 
